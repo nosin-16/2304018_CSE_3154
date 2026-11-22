@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Acode</title>
+  <style>
+    :root {
+      --bg: #111318;
+      --panel: #181b21;
+      --panel-2: #20242c;
+      --line: #30343d;
+      --text: #e6e8ec;
+      --muted: #969daa;
+      --accent: #7c6cff;
+      --accent-2: #9a91ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .app {
+      height: 100vh;
+      display: grid;
+      grid-template-rows: 54px 1fr 28px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      margin-right: auto;
+    }
+
+    .logo {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), #4bc0ff);
+      font-size: 13px;
+    }
+
+    button {
+      border: 0;
+      color: var(--text);
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .icon-btn,
+    .run-btn {
+      height: 36px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-btn {
+      width: 36px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .icon-btn:hover { background: var(--panel-2); color: var(--text); }
+
+    .run-btn {
+      gap: 7px;
+      padding: 0 13px;
+      background: var(--accent);
+      font-weight: 700;
+    }
+
+    .run-btn:hover { background: var(--accent-2); }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(280px, 46%) 54%;
+      min-height: 0;
+    }
+
+    .editor-pane,
+    .preview-pane {
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .editor-pane {
+      display: grid;
+      grid-template-rows: 42px 1fr;
+      border-right: 1px solid var(--line);
+    }
+
+    .tabs {
+      display: flex;
+      align-items: end;
+      background: #15181e;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tab {
+      height: 42px;
+      min-width: 96px;
+      padding: 0 14px;
+      border-right: 1px solid var(--line);
+      color: var(--muted);
+      border-top: 2px solid transparent;
+    }
+
+    .tab.active {
+      color: var(--text);
+      background: var(--panel);
+      border-top-color: var(--accent);
+    }
+
+    .tab-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-right: 7px;
+      background: #ffb86c;
+    }
+
+    #cssTab .tab-dot { background: #7c6cff; }
+    #jsTab .tab-dot { background: #e8d44d; }
+
+    textarea {
+      width: 100%;
+      height: 100%;
+      resize: none;
+      border: 0;
+      outline: 0;
+      padding: 16px;
+      background: var(--panel);
+      color: #d7dce4;
+      font: 14px/1.65 "Cascadia Code", Consolas, monospace;
+      tab-size: 2;
+    }
+
+    textarea::selection { background: #49408d; }
+
+    .preview-pane {
+      display: grid;
+      grid-template-rows: 42px 1fr;
+      background: #e9edf3;
+    }
+
+    .preview-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      background: #15181e;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .traffic { display: flex; gap: 5px; }
+    .traffic i { width: 8px; height: 8px; border-radius: 50%; background: #555b66; }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: white;
+    }
+
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      background: #0d0f13;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .status { display: flex; gap: 14px; }
+
+    @media (max-width: 700px) {
+      main { grid-template-columns: 1fr; grid-template-rows: 50% 50%; }
+      .editor-pane { border-right: 0; border-bottom: 1px solid var(--line); }
+      .brand span:last-child { display: none; }
+      .tab { min-width: 82px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">&lt;/&gt;</div>
+        <span>Mini Acode</span>
+      </div>
+      <button class="icon-btn" id="clearBtn" title="Reset code" aria-label="Reset code">↺</button>
+      <button class="run-btn" id="runBtn"><span>▶</span> Run</button>
+    </header>
+
+    <main>
+      <section class="editor-pane">
+        <div class="tabs" role="tablist">
+          <button class="tab active" id="htmlTab" role="tab"><span class="tab-dot"></span>index.html</button>
+          <button class="tab" id="cssTab" role="tab"><span class="tab-dot"></span>style.css</button>
+          <button class="tab" id="jsTab" role="tab"><span class="tab-dot"></span>script.js</button>
+        </div>
+        <textarea id="htmlEditor" aria-label="HTML editor" spellcheck="false"></textarea>
+        <textarea id="cssEditor" aria-label="CSS editor" spellcheck="false" hidden></textarea>
+        <textarea id="jsEditor" aria-label="JavaScript editor" spellcheck="false" hidden></textarea>
+      </section>
+
+      <section class="preview-pane">
+        <div class="preview-bar">
+          <div class="traffic"><i></i><i></i><i></i></div>
+          <span>Live Preview</span>
+        </div>
+        <iframe id="preview" title="Code preview"></iframe>
+      </section>
+    </main>
+
+    <footer>
+      <div>Ready</div>
+      <div class="status">
+        <span id="cursorStatus">Ln 1, Col 1</span>
+        <span>HTML</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const editors = {
+      html: document.getElementById('htmlEditor'),
+      css: document.getElementById('cssEditor'),
+      js: document.getElementById('jsEditor')
+    };
+
+    const tabs = {
+      html: document.getElementById('htmlTab'),
+      css: document.getElementById('cssTab'),
+      js: document.getElementById('jsTab')
+    };
+
+    const preview = document.getElementById('preview');
+    const cursorStatus = document.getElementById('cursorStatus');
+
+    const defaults = {
+      html: `<main class="card">
+  <span class="badge">HELLO WORLD</span>
+  <h1>Build something <em>amazing.</em></h1>
+  <p>This is your mini code playground.</p>
+  <button id="helloBtn">Say hello</button>
+</main>`,
+      css: `* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #f4f1ff;
+  color: #24212f;
+  font-family: Arial, sans-serif;
+}
+
+.card {
+  width: min(520px, 85vw);
+  padding: 48px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 18px 50px rgba(75, 62, 130, .14);
+}
+
+.badge {
+  color: #7566d8;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+h1 { font-size: clamp(38px, 8vw, 64px); line-height: 1; }
+em { color: #7566d8; }
+p { color: #777184; }
+
+button {
+  margin-top: 12px;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 18px;
+  background: #7566d8;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}`,
+      js: `document.getElementById('helloBtn').addEventListener('click', () => {
+  alert('Hello from Mini Acode!');
+});`
+    };
+
+    let activeType = 'html';
+
+    function load() {
+      Object.keys(editors).forEach(type => {
+        editors[type].value = localStorage.getItem('mini-acode-' + type) || defaults[type];
+      });
+    }
+
+    function save(type) {
+      localStorage.setItem('mini-acode-' + type, editors[type].value);
+    }
+
+    function run() {
+      const documentSource = `<!DOCTYPE html>
+<html>
+<head><style>${editors.css.value}<\/style><\/head>
+<body>${editors.html.value}<script>${editors.js.value}<\/script><\/body>
+</html>`;
+      preview.srcdoc = documentSource;
+    }
+
+    function switchTab(type) {
+      activeType = type;
+      Object.keys(editors).forEach(key => {
+        editors[key].hidden = key !== type;
+        tabs[key].classList.toggle('active', key === type);
+      });
+      editors[type].focus();
+      updateCursor(editors[type]);
+      document.querySelector('.status span:last-child').textContent = type.toUpperCase();
+    }
+
+    function updateCursor(editor) {
+      const position = editor.selectionStart;
+      const before = editor.value.slice(0, position);
+      const lines = before.split('\n');
+      cursorStatus.textContent = `Ln ${lines.length}, Col ${lines.at(-1).length + 1}`;
+    }
+
+    Object.keys(editors).forEach(type => {
+      editors[type].addEventListener('input', () => {
+        save(type);
+        updateCursor(editors[type]);
+        clearTimeout(window.previewTimer);
+        window.previewTimer = setTimeout(run, 350);
+      });
+      editors[type].addEventListener('click', () => updateCursor(editors[type]));
+      editors[type].addEventListener('keyup', () => updateCursor(editors[type]));
+      editors[type].addEventListener('keydown', event => {
+        if (event.key === 'Tab') {
+          event.preventEventDefault?.();
+          event.preventDefault();
+          const start = editors[type].selectionStart;
+          const end = editors[type].selectionEnd;
+          editors[type].setRangeText('  ', start, end, 'end');
+          editors[type].dispatchEvent(new Event('input'));
+        }
+      });
+      tabs[type].addEventListener('click', () => switchTab(type));
+    });
+
+    document.getElementById('runBtn').addEventListener('click', run);
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      if (confirm('Reset all code to the starter template?')) {
+        Object.keys(editors).forEach(type => {
+          localStorage.removeItem('mini-acode-' + type);
+        });
+        load();
+        run();
+      }
+    });
+
+    load();
+    switchTab('html');
+    run();
+  </script>
+</body>
+</html>
