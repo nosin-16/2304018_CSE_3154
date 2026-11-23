@@ -12,16 +12,19 @@
     <h1>My Projects</h1>
 
     <!-- Project 1 -->
-    <h2>RF-Controlled Vehicle Speed Limiter</h2>
-    <img src="images/project-one.png" alt="RF speed limiter project prototype" width="300">
-    <p>An Arduino-based system that limits a vehicle's speed using a 433 MHz RF transmitter and receiver with HT12E/HT12D encoder and decoder.</p>
+    <h2>Zone Based Vehicle Speed Limiter</h2>
+    <img src="images/project-one.png" alt="Zone based vehicle speed limiter with remote and receiver circuits" width="300">
+    <p>A wireless speed limiting system for a vehicle. The remote unit uses an nRF24L01 module with increase and decrease buttons and four limit-changing buttons to set the speed limit for each zone. The receiver unit gets the limit through its own nRF24L01 module (with adapter) and controls a DC motor through an L298 motor driver using an Arduino, so the speed never goes above the limit of the current zone.</p>
     <h3>Technologies used</h3>
     <ul>
-        <li>Arduino</li>
-        <li>RF-433 / FS1000A module</li>
-        <li>HT12E / HT12D</li>
+        <li>Arduino (2 boards: remote and receiver)</li>
+        <li>nRF24L01 wireless modules with adapter</li>
+        <li>L298 motor driver</li>
+        <li>DC motor</li>
+        <li>Push buttons (increase, decrease and 4 limit buttons)</li>
+        <li>10 &micro;F capacitors (2)</li>
     </ul>
-    <p><a href="https://github.com/your-username/rf-speed-limiter" target="_blank">View on GitHub</a></p>
+    <p><a href="https://github.com/your-username/zone-speed-limiter" target="_blank">View on GitHub</a></p>
 
     <!-- Project 2 -->
     <h2>DC-DC Converter Simulation</h2>
@@ -32,7 +35,7 @@
         <li>MATLAB</li>
         <li>Proteus</li>
     </ul>
-    <p><a href="https://github.com/your-username/dc-dc-converters" target="_blank">View on GitHub</a></p>
+    <p><a href="https://github.com/nosin-16/dc-dc-converters" target="_blank">View on GitHub</a></p>
 
     <!-- Project 3 -->
     <h2>Data Structures Mini Project in C</h2>
@@ -41,11 +44,22 @@
     <h3>Technologies used</h3>
     <ul>
         <li>C</li>
-        <li>Git</li>
     </ul>
-    <p><a href="https://github.com/your-username/c-mini-project" target="_blank">View on GitHub</a></p>
+    <p><a href="https://github.com/nosin-16/c-mini-project" target="_blank">View on GitHub</a></p>
+
+        <!-- Project 4 -->
+    <h2>SameGame Mini Project in C++ (OOP)</h2>
+    <img src="images/project-four.png" alt="Screenshot of the SameGame puzzle built with C++" width="300">
+    <p>A mini SameGame puzzle built with object-oriented programming in C++. The player removes groups of adjacent blocks of the same colour from a grid, and the remaining blocks shift to fill the gaps while the score is updated.</p>
+    <h3>Technologies used</h3>
+    <ul>
+        <li>C++</li>
+        <li>Object-oriented programming (classes and objects)</li>
+    </ul>
+    
+
 
     <hr>
-    <p>&copy; 2026 Humyra Tasnim Nosin</p>
+    <p>&copy; 2026  Humyra Tasnim Nosin</p>
 </body>
 </html>
